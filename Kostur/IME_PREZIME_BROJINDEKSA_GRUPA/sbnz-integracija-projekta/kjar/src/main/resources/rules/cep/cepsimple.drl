@@ -9,55 +9,42 @@ rule "cena_rule"
     when
         $ip : IdealPlace()
         $s : Score()
-        $r : RuleChain(getRulechain() == 0)
         Place($ip.getMin_cena() <= getProsecna_cena() && $ip.getMax_cena() >= getProsecna_cena())
     then
         modify($s){setFirst(true)}
-        modify($r){setRulechain(1)}
-        insert($r);
 end
 
 rule "temperatura_rule"
     when
         $ip : IdealPlace()
         $s : Score()
-        $r : RuleChain(getRulechain() == 1)
         Place($ip.getMin_temperatura() <= getProsecna_temperatura() && $ip.getMax_temperatura() >= getProsecna_temperatura())
     then
         modify($s){setSecond(true)}
-        modify($r){setRulechain(2)}
-        insert($r);
 end
 
 rule "nocni_zivot_rule"
     when
         $ip : IdealPlace()
         $s : Score()
-        $r : RuleChain(getRulechain() == 2)
         Place($ip.getNocni_zivot() <= getNocni_zivot())
     then
         modify($s){setThird(true)}
-        modify($r){setRulechain(3)}
-        insert($r);
 end
 
 rule "urbanost_rule"
     when
         $ip : IdealPlace()
         $s : Score()
-        $r : RuleChain(getRulechain() == 3)
         Place($ip.getUrbanost() >= getUrbanost())
     then
         modify($s){setFourth(true)}
-        modify($r){setRulechain(4)}
-        insert($r);
 end
 
 rule "luksuz_rule"
     when
         $ip : IdealPlace()
         $s : Score()
-        $r : RuleChain(getRulechain() == 4)
         Place($ip.getLuksuz() <= getLuksuz())
     then
         modify($s){setSixth(true)}
