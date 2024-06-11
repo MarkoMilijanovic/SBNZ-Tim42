@@ -24,4 +24,18 @@ public class Place implements Serializable {
     Boolean vodene_povrsine;
     int hrana;
     Boolean skijalista;
+    Score score;
+
+    public void cpScore(Score score) {
+        this.score.First = score.First;
+        this.score.Second = score.Second;
+        this.score.Third = score.Third;
+        this.score.Fourth = score.Fourth;
+        this.score.Fifth = score.Fifth;
+        this.score.Sixth = score.Sixth;
+        this.score.Seventh = score.Seventh;
+        this.score.Eighth = score.Eighth;
+        this.score.Ninth = score.Ninth;
+        this.score.Tenth = score.Tenth;
+    }
 }

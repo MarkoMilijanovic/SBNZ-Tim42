@@ -5,62 +5,87 @@ import com.ftn.sbnz.model.models.Score;
 import com.ftn.sbnz.model.models.RuleChain;
 import java.util.List;
 
+rule "chain-1"
+    when
+        IdealPlace()
+        Score()
+        Place()
+        $rc: RuleChain(getRulechain() == 0)
+    then
+        modify($rc){setRulechain(1)}
+end
+
+rule "chain-2"
+    when
+        $rc: RuleChain(getRulechain() == 1)
+    then
+        modify($rc){setRulechain(2)}
+end
+
+rule "chain-3"
+    when
+        $rc: RuleChain(getRulechain() == 2)
+    then
+        modify($rc){setRulechain(3)}
+end
+
+rule "chain-4"
+    when
+        $rc: RuleChain(getRulechain() == 3)
+    then
+        modify($rc){setRulechain(4)}
+end
+
 rule "cena_rule"
     when
         $ip : IdealPlace()
         $s : Score()
-        $r : RuleChain(getRulechain() == 0)
-        Place($ip.getMin_cena() <= getProsecna_cena() && $ip.getMax_cena() >= getProsecna_cena())
+        RuleChain(getRulechain() == 0)
+//        Place()
+        $rc: RuleChain(getRulechain() == 0)
+        Place($ip.getMin_cena() <= getProsecna_cena(), $ip.getMax_cena() >= getProsecna_cena())
     then
-        modify($s){setFirst(true)}
-        modify($r){setRulechain(1)}
-        insert($r);
+        $s.setFirst(true);
 end
 
 rule "temperatura_rule"
     when
         $ip : IdealPlace()
         $s : Score()
-        $r : RuleChain(getRulechain() == 1)
-        Place($ip.getMin_temperatura() <= getProsecna_temperatura() && $ip.getMax_temperatura() >= getProsecna_temperatura())
+        $rc: RuleChain(getRulechain() == 1)
+        Place($ip.getMin_temperatura() <= getProsecna_temperatura(), $ip.getMax_temperatura() >= getProsecna_temperatura())
     then
-        modify($s){setSecond(true)}
-        modify($r){setRulechain(2)}
-        insert($r);
+        $s.setSecond(true);
 end
 
 rule "nocni_zivot_rule"
     when
         $ip : IdealPlace()
         $s : Score()
-        $r : RuleChain(getRulechain() == 2)
-        Place($ip.getNocni_zivot() <= getNocni_zivot())
+        $rc: RuleChain(getRulechain() == 2)
+        Place($ip.getMin_nocni_zivot() <= getNocni_zivot(), $ip.getMax_nocni_zivot() >= getNocni_zivot())
     then
-        modify($s){setThird(true)}
-        modify($r){setRulechain(3)}
-        insert($r);
+        $s.setThird(true);
 end
 
 rule "urbanost_rule"
     when
         $ip : IdealPlace()
         $s : Score()
-        $r : RuleChain(getRulechain() == 3)
-        Place($ip.getUrbanost() >= getUrbanost())
+        $rc: RuleChain(getRulechain() == 3)
+        Place($ip.getMin_urbanost() <= getUrbanost(), $ip.getMax_urbanost() >= getUrbanost())
     then
-        modify($s){setFourth(true)}
-        modify($r){setRulechain(4)}
-        insert($r);
+        $s.setFourth(true);
 end
 
 rule "luksuz_rule"
     when
         $ip : IdealPlace()
         $s : Score()
-        $r : RuleChain(getRulechain() == 4)
-        Place($ip.getLuksuz() <= getLuksuz())
+        RuleChain(getRulechain() == 4)
+        Place($ip.getMin_luksuz() <= getLuksuz(), $ip.getMax_luksuz() >= getLuksuz())
     then
-        modify($s){setSixth(true)}
+        $s.setFifth(true);
 end
 
 rule "gradski_prevoz_rule"
@@ -69,7 +94,7 @@ rule "gradski_prevoz_rule"
         $s : Score()
         Place($ip.getDostupnost_gradskog_prevoza() == getDostupnost_gradskog_prevoza())
     then
-        modify($s){setSeventh(true)}
+        $s.setSixth(true);
 end
 
 rule "vodene_površine_rule"
@@ -78,16 +103,16 @@ rule "vodene_površine_rule"
         $s : Score()
         Place($ip.getVodene_povrsine() == getVodene_povrsine())
     then
-        modify($s){setEighth(true)}
+        $s.setSeventh(true);
 end
 
 rule "hrana_rule"
     when
         $ip : IdealPlace()
         $s : Score()
-        Place($ip.getHrana() >= getHrana())
+        Place($ip.getMin_hrana() <= getHrana(), $ip.getMax_hrana >= getHrana())
     then
-        modify($s){setNinth(true)}
+        $s.setEighth(true);
 end
 
 rule "skijalista_rule"
@@ -96,5 +121,5 @@ rule "skijalista_rule"
         $s : Score()
         Place($ip.getSkijalista() == getSkijalista())
     then
-        modify($s){setTenth(true)}
+        $s.setNinth(true);
 end

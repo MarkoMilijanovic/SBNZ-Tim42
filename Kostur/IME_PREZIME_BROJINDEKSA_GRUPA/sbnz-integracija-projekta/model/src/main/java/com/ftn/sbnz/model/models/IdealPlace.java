@@ -16,13 +16,16 @@ public class IdealPlace implements Serializable {
     float max_cena;
     float min_temperatura;
     float max_temperatura;
-    int nocni_zivot;
-    int urbanost;
+    int min_nocni_zivot;
+    int max_nocni_zivot;
+    int min_urbanost;
+    int max_urbanost;
     int[] najposeceniji_period_godine;
     Boolean dostupnost_gradskog_prevoza;
-    int luksuz;
+    int min_luksuz;
+    int max_luksuz;
     Boolean vodene_povrsine;
-    int hrana;
+    int min_hrana;
+    int max_hrana;
     Boolean skijalista;
-    int [] priority;
 }

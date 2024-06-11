@@ -19,7 +19,6 @@ public class ServiceApplication  {
 	private static Logger log = LoggerFactory.getLogger(ServiceApplication.class);
 	public static void main(String[] args) {
 		ApplicationContext ctx = SpringApplication.run(ServiceApplication.class, args);
-
 		String[] beanNames = ctx.getBeanDefinitionNames();
 		Arrays.sort(beanNames);
 
@@ -33,8 +32,7 @@ public class ServiceApplication  {
 	@Bean
 	public KieContainer kieContainer() {
 		KieServices ks = KieServices.Factory.get();
-		KieContainer kContainer = ks
-				.newKieContainer(ks.newReleaseId("com.ftn.sbnz", "kjar", "0.0.1-SNAPSHOT"));
+		KieContainer kContainer = ks.newKieContainer(ks.newReleaseId("com.ftn.sbnz", "kjar", "0.0.1-SNAPSHOT"));
 		KieScanner kScanner = ks.newKieScanner(kContainer);
 		kScanner.start(1000);
 		return kContainer;

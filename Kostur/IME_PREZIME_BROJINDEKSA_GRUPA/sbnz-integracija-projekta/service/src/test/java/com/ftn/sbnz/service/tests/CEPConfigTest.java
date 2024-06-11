@@ -1,8 +1,6 @@
 package com.ftn.sbnz.service.tests;
 
-import com.ftn.sbnz.model.models.IdealPlace;
-import com.ftn.sbnz.model.models.Place;
-import com.ftn.sbnz.model.models.Score;
+import com.ftn.sbnz.model.models.*;
 import org.junit.Test;
  import org.kie.api.KieServices;
  import org.kie.api.runtime.KieContainer;
@@ -26,38 +24,46 @@ public class CEPConfigTest {
         KieSession ksession = kContainer.newKieSession("cepKsession");
         SessionPseudoClock clock = ksession.getSessionClock();
 
-        IdealPlace ideal_place = new IdealPlace(100, 1000, 25, 45, 5,
-                6, new int[]{10, 2}, true, 5, false, 10,
-                false, new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11});
+        IdealPlace ideal_place = new IdealPlace(100, 1000, 10, 45, 5, 7, 4, 8,
+                new int[]{6, 8}, true, 7, 10,
+                true, 8, 10, true);
 
-        Place p1 = new Place("p1", "z1", "k1", 101, 25,
-                5, 6, new int[]{1, 3}, true, 5, false,
-                10, true);
-        Place p2 = new Place("p2", "z2", "k2", 10, 30,
-                5, 1, new int[]{12, 1}, true, 1, true,
-                2, false);
-        Place p3 = new Place("p3", "z3", "k3", 1000, 100,
-                3, 10, new int[]{5, 9}, true, 10, true,
-                2, false);
+//        Place p1 = new Place("p1", "z1", "k1", 101, 25,
+//                5, 6, new int[]{1, 3}, true, 5, false,
+//                10, true, new Score());
+//        Place p2 = new Place("p2", "z2", "k2", 10, 30,
+//                5, 1, new int[]{12, 1}, true, 1, true,
+//                2, false, new Score());
+//        Place p3 = new Place("p3", "z3", "k3", 1000, 100,
+//                3, 10, new int[]{5, 9}, true, 10, true,
+//                2, false, new Score());
 
-        List<Place> places = new ArrayList<>();
-        places.add(p1);
-        places.add(p2);
-        places.add(p3);
+        Places places = new Places();
+//        places.add(p1);
+//        places.add(p2);
+//        places.add(p3);
         clock.advanceTime(1, TimeUnit.MINUTES);
 
         ksession.insert(ideal_place);
         Score score = new Score();
         ksession.insert(score);
-        for (Place place : places) {
-            ksession.insert(place);
 
+        for (Place place : places.getPlaces()) {
+            ksession.insert(place);
+            ksession.insert(new RuleChain());
             int ruleCount = ksession.fireAllRules();
             System.out.println(ruleCount);
 
-            clock.advanceTime(1, TimeUnit.MINUTES);
+
+            place.cpScore(score);
+            System.out.println(place.getNaziv() + " " + place.getScore().calculateScore());
+            System.out.println(score.isFirst() + " " + score.isSecond() + " " + score.isThird() + " " + score.isFourth()
+                    + " " + score.isFifth() + " " + score.isSixth() + " " + score.isSeventh() + " " + score.isEighth() + " " + score.isNinth() + " ");
+
             score.reset();
+            clock.advanceTime(1, TimeUnit.MINUTES);
         }
+        System.out.println(places.best().getNaziv());
         assertThat(1, equalTo(1));
     }
 }

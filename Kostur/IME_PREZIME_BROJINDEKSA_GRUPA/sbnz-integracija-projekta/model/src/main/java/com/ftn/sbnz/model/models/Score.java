@@ -8,7 +8,6 @@ import lombok.Setter;
 import java.io.Serializable;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 public class Score implements Serializable {
@@ -34,5 +33,31 @@ public class Score implements Serializable {
         this.Eighth = false;
         this.Ninth = false;
         this.Tenth = false;
+    }
+    public Score(){
+        this.First = false;
+        this.Second = false;
+        this.Third = false;
+        this.Fourth = false;
+        this.Fifth = false;
+        this.Sixth = false;
+        this.Seventh = false;
+        this.Eighth = false;
+        this.Ninth = false;
+        this.Tenth = false;
+    }
+    public int calculateScore(){
+        int score = 0;
+        if(this.First){score++;}
+        if(this.Second){score++;}
+        if(this.Third){score++;}
+        if(this.Fourth){score++;}
+        if(this.Fifth){score++;}
+        if(this.Sixth){score++;}
+        if(this.Seventh){score++;}
+        if(this.Eighth){score++;}
+        if(this.Ninth){score++;}
+        if(this.Tenth){score++;}
+        return score;
     }
 }

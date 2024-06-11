@@ -12,6 +12,24 @@ import {
     RadioGroup,
     Slider
 } from "@mui/material";
+import axios from 'axios';
+
+// float min_cena;
+// float max_cena;
+// float min_temperatura;
+// float max_temperatura;
+// int min_nocni_zivot;
+// int max_nocni_zivot;
+// int min_urbanost;
+// int max_urbanost;
+// int[] najposeceniji_period_godine;
+// Boolean dostupnost_gradskog_prevoza;
+// int min_luksuz;
+// int max_luksuz;
+// Boolean vodene_povrsine;
+// int min_hrana;
+// int max_hrana;
+// Boolean skijalista;
 
 const marksTemp = [
     {
@@ -84,7 +102,7 @@ function SimpleDialog(props: SimpleDialogProps) {
 
     return (
         <Dialog onClose={handleClose} open={open}>
-            <DialogTitle>Set backup account</DialogTitle>
+            <DialogTitle>Predloženo mesto za izlet:</DialogTitle>
         </Dialog>
     );
 }
@@ -194,6 +212,13 @@ function App() {
         setOpen(true);
     }
     const handleClose = () => {
+        axios.get('http://localhost:8080/recommend')
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         setOpen(false);
     };
 
