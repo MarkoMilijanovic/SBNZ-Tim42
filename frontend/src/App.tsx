@@ -6,8 +6,6 @@ import {
     DialogTitle,
     FormControlLabel,
     Grid,
-    List,
-    ListItemButton, ListItemText,
     Radio,
     RadioGroup,
     Slider
@@ -30,6 +28,25 @@ import axios from 'axios';
 // int min_hrana;
 // int max_hrana;
 // Boolean skijalista;
+
+// export interface DTO{
+//     min_cena : number;
+//     max_cena : number;
+//     min_temperatura : number;
+//     max_temperatura : number;
+//     min_nocni_zivot : number;
+//     max_nocni_zivot : number;
+//     min_urbanost : number;
+//     max_urbanost : number;
+//     najposeceniji_period_godine : number[];
+//     dostupnost_gradskog_prevoza : boolean;
+//     min_luksuz : number;
+//     max_luksuz : number;
+//     vodene_povrsine : boolean;
+//     min_hrana : number;
+//     max_hrana : number;
+//     skijalista : boolean;
+// }
 
 const marksTemp = [
     {
@@ -75,10 +92,6 @@ const marksMeseci = [
         label: '12',
     },
 ];
-export interface SimpleDialogProps {
-    open: boolean;
-    onClose: () => void;
-}
 
 const minDistancePrice = 20;
 const minDistanceTemp = 5;
@@ -90,6 +103,7 @@ function valuetext(value: number) {
 
 export interface SimpleDialogProps {
     open: boolean;
+    ime: string;
     onClose: () => void;
 }
 
@@ -102,9 +116,14 @@ function SimpleDialog(props: SimpleDialogProps) {
 
     return (
         <Dialog onClose={handleClose} open={open}>
-            <DialogTitle>Predloženo mesto za izlet:</DialogTitle>
+            <DialogTitle>Predloženo mesto za izlet: {props.ime}</DialogTitle>
         </Dialog>
     );
+}
+
+function toBool(num: number){
+    return num != 0;
+
 }
 
 function App() {
@@ -121,6 +140,8 @@ function App() {
     const [valueGP, setGP] = React.useState<number>(0)
     const [valueVP, setVP] = React.useState<number>(0)
     const [valueSkijalista, setSkijalista] = React.useState<number>(0)
+
+    const [valueIme, setIme] = React.useState<string>("ime");
 
     // Slider handlers
     const handleChangeCost = (event: Event, newValue: number | number[], activeThumb: number) => {
@@ -209,16 +230,40 @@ function App() {
     const [open, setOpen] = React.useState(false);
 
     const openRec =() =>{
-        setOpen(true);
-    }
-    const handleClose = () => {
-        axios.get('http://localhost:8080/recommend')
+        var dto = {
+            min_cena: valueCost.at(0),
+            max_cena: valueCost.at(1),
+            min_temperatura: valueTemp.at(0),
+            max_temperatura: valueTemp.at(1),
+            min_nocni_zivot: valueNZ.at(0),
+            max_nocni_zivot: valueNZ.at(1),
+            min_urbanost: valueUrbanost.at(0),
+            max_urbanost: valueUrbanost.at(1),
+            najposeceniji_period_godine: [valueMeseci.at(0), valueMeseci.at(1)],
+            dostupnost_gradskog_prevoza: toBool(valueGP),
+            min_luksuz: valueLuksuz.at(0),
+            max_luksuz: valueLuksuz.at(1),
+            vodene_povrsine: toBool(valueVP),
+            min_hrana: valueHrana.at(0),
+            max_hrana: valueHrana.at(1),
+            skijalista: toBool(valueSkijalista)
+        }
+        console.log(dto);
+
+        axios.post('http://localhost:8080/recommend', dto)
             .then(function (response) {
+                setIme(response.data.naziv);
+                setOpen(true);
                 console.log(response);
             })
             .catch(function (error) {
+                setOpen(true);
                 console.log(error);
             });
+
+
+    }
+    const handleClose = () => {
         setOpen(false);
     };
 
@@ -467,6 +512,7 @@ function App() {
 
             <SimpleDialog
                 open={open}
+                ime={valueIme}
                 onClose={handleClose}
             />
         </div>

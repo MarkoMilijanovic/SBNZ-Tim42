@@ -1,15 +1,15 @@
 package com.ftn.sbnz.service;
 
-import com.ftn.sbnz.model.models.IdealPlace;
-import com.ftn.sbnz.model.models.Place;
-import com.ftn.sbnz.model.models.Places;
-import com.ftn.sbnz.model.models.Score;
+import com.ftn.sbnz.model.models.*;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.kie.api.time.SessionPseudoClock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
 public class RecommendationService {
@@ -28,13 +28,17 @@ public class RecommendationService {
 
         KieSession kieSession = kieContainer.newKieSession("cepKsession");
 
+        SessionPseudoClock clock = kieSession.getSessionClock();
+
         kieSession.insert(ip);
         kieSession.insert(score);
         for(Place p: places.getPlaces()){
             kieSession.insert(p);
+            kieSession.insert(new RuleChain());
             int ruleCount = kieSession.fireAllRules();
             p.cpScore(score);
             score.reset();
+            clock.advanceTime(1, TimeUnit.MINUTES);
         }
         kieSession.dispose();
         return places.best();

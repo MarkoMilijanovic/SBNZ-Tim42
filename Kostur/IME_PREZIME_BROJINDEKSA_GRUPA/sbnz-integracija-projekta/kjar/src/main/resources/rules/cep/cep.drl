@@ -41,7 +41,6 @@ rule "cena_rule"
         $ip : IdealPlace()
         $s : Score()
         RuleChain(getRulechain() == 0)
-//        Place()
         $rc: RuleChain(getRulechain() == 0)
         Place($ip.getMin_cena() <= getProsecna_cena(), $ip.getMax_cena() >= getProsecna_cena())
     then

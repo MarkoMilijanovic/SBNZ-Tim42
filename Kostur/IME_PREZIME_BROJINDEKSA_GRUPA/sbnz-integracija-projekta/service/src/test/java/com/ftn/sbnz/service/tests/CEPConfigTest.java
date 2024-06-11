@@ -24,7 +24,7 @@ public class CEPConfigTest {
         KieSession ksession = kContainer.newKieSession("cepKsession");
         SessionPseudoClock clock = ksession.getSessionClock();
 
-        IdealPlace ideal_place = new IdealPlace(100, 1000, 10, 45, 5, 7, 4, 8,
+        IdealPlace ideal_place = new IdealPlace(300, 1000, 10, 45, 5, 7, 4, 8,
                 new int[]{6, 8}, true, 7, 10,
                 true, 8, 10, true);
 

@@ -2,6 +2,10 @@ package com.ftn.sbnz.service;
 
 import java.util.Arrays;
 
+import org.kie.api.builder.KieBuilder;
+import org.kie.api.builder.KieFileSystem;
+import org.kie.api.builder.KieModule;
+import org.kie.internal.io.ResourceFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.kie.api.KieServices;
@@ -12,9 +16,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 public class ServiceApplication  {
+	private static final String drfile = "..\\..\\..\\..\\src\\main\\resources\\rules\\cep\\cep.drl";
 	
 	private static Logger log = LoggerFactory.getLogger(ServiceApplication.class);
 	public static void main(String[] args) {
@@ -37,12 +44,4 @@ public class ServiceApplication  {
 		kScanner.start(1000);
 		return kContainer;
 	}
-	
-	/*
-	 * KieServices ks = KieServices.Factory.get(); KieContainer kContainer =
-	 * ks.newKieContainer(ks.newReleaseId("drools-spring-v2",
-	 * "drools-spring-v2-kjar", "0.0.1-SNAPSHOT")); KieScanner kScanner =
-	 * ks.newKieScanner(kContainer); kScanner.start(10_000); KieSession kSession =
-	 * kContainer.newKieSession();
-	 */
 }
